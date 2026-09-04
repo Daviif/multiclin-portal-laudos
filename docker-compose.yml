@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: multiclin
+      POSTGRES_PASSWORD: multiclin
+      POSTGRES_DB: multiclin
+    ports:
+      - "5432:5432"
+    volumes:
+      - multiclin_db_data:/var/lib/postgresql/data
+
+volumes:
+  multiclin_db_data:

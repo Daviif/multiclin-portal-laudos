@@ -18,6 +18,48 @@ Portal único de laudos médicos para a clínica de diagnóstico por imagem Mult
 
 Os requisitos funcionais/não funcionais e regras de negócio usados como base para o backlog desta etapa estão resumidos em [`docs/requisitos.md`](docs/requisitos.md).
 
+## Stack
+
+Definida na Etapa 2 (`Etapa 2 - Pitch/Pitch_Multiclin_CSI606.pdf`):
+
+- **Frontend:** React (Vite)
+- **Backend/API:** Node.js + Express
+- **Banco de dados:** PostgreSQL + Prisma
+- **Autenticação:** JWT
+- **Hospedagem:** nuvem (a definir)
+
+## Estrutura do repositório
+
+```
+backend/     API Express + Prisma (schema em backend/prisma/schema.prisma)
+frontend/    App React (Vite), uma página por tela do wireframe da Etapa 4
+docker-compose.yml   Postgres local para desenvolvimento
+```
+
+## Como rodar localmente
+
+1. Suba o banco: `docker compose up -d`
+2. Backend:
+   ```
+   cd backend
+   cp .env.example .env
+   npm install
+   npm run prisma:migrate   # cria as tabelas a partir do schema.prisma
+   npm run dev              # http://localhost:3333
+   ```
+3. Frontend:
+   ```
+   cd frontend
+   npm install
+   npm run dev               # http://localhost:5173
+   ```
+
+O frontend faz proxy de `/api/*` para o backend (ver `frontend/vite.config.js`).
+
+Cada rota do backend e cada tela do frontend hoje é um placeholder (`TODO RFxx: ...`)
+apontando para a issue correspondente no board — a estrutura de pastas já reflete
+os 8 wireframes e os RF01-RF12, falta implementar a lógica de cada um.
+
 ## Processo de desenvolvimento
 
 Trabalhamos com **Kanban** no GitHub Projects. O fluxo de trabalho, convenções de branch/commit e definição de pronto estão descritos em [`PROCESSO.md`](PROCESSO.md).

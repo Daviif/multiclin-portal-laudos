@@ -1,0 +1,146 @@
+// Espelha o modelo de dados da Etapa 4
+// (../../Etapa 4 - Planejamento/Modelo_Banco_de_Dados.puml).
+// Onde o .puml usava `string` para um campo de domínio fechado (perfil, modalidade
+// de exame), foi trocado por enum aqui — ajustar/reverter se a dupla preferir.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Perfil {
+  PACIENTE
+  MEDICO_SOLICITANTE
+  MEDICO_EXECUTANTE
+  REGULACAO
+}
+
+// RF04 — modalidades de exame que precisam ser filtráveis.
+enum ModalidadeExame {
+  US
+  RX
+  MG
+  TC
+  RM
+}
+
+// RN02: só laudo finalizado libera o exame para os demais perfis.
+// Estados provisórios até a dupla fechar o diagrama de estados do Exame
+// (citado como pendente na Etapa 4) — ajustar aqui quando isso acontecer.
+enum StatusExame {
+  SOLICITADO
+  EM_EXECUCAO
+  LAUDO_DISPONIVEL
+  CANCELADO
+}
+
+model Usuario {
+  id          String   @id @default(uuid())
+  nome        String
+  email       String   @unique
+  senhaHash   String?  @map("senha_hash") // null até o convite (RF09) ser aceito
+  perfil      Perfil
+  criadoEm    DateTime @default(now()) @map("criado_em")
+
+  paciente      Paciente?
+  medicoSo      MedicoSolicitante?
+  medicoEx      MedicoExecutante?
+  regulacao     Regulacao?
+  notificacoes  Notificacao[]
+
+  @@map("usuarios")
+}
+
+model Paciente {
+  id             String   @id @default(uuid())
+  usuarioId      String   @unique @map("usuario_id")
+  cpf            String   @unique
+  dataNascimento DateTime @map("data_nascimento")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  exames  Exame[]
+
+  @@map("pacientes")
+}
+
+model MedicoSolicitante {
+  id        String @id @default(uuid())
+  usuarioId String @unique @map("usuario_id")
+  crm       String
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  exames  Exame[]
+
+  @@map("medicos_solicitantes")
+}
+
+model MedicoExecutante {
+  id        String @id @default(uuid())
+  usuarioId String @unique @map("usuario_id")
+  crm       String
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  laudos  Laudo[]
+
+  @@map("medicos_executantes")
+}
+
+model Regulacao {
+  id        String @id @default(uuid())
+  usuarioId String @unique @map("usuario_id")
+  municipio String
+  uf        String
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  exames  Exame[]
+
+  @@map("regulacoes")
+}
+
+model Exame {
+  id                   String          @id @default(uuid())
+  pacienteId           String          @map("paciente_id")
+  medicoSolicitanteId  String          @map("medico_solicitante_id")
+  regulacaoId          String?         @map("regulacao_id") // nulo: exame não veio do SUS (RN04)
+  tipoExame            ModalidadeExame @map("tipo_exame")
+  dataSolicitacao      DateTime        @default(now()) @map("data_solicitacao")
+  status               StatusExame     @default(SOLICITADO)
+
+  paciente           Paciente          @relation(fields: [pacienteId], references: [id])
+  medicoSolicitante  MedicoSolicitante @relation(fields: [medicoSolicitanteId], references: [id])
+  regulacao          Regulacao?        @relation(fields: [regulacaoId], references: [id])
+  laudo              Laudo?
+
+  @@map("exames")
+}
+
+model Laudo {
+  id                  String   @id @default(uuid())
+  exameId             String   @unique @map("exame_id")
+  medicoExecutanteId  String   @map("medico_executante_id")
+  arquivoPdf          String   @map("arquivo_pdf") // caminho/URL do PDF (storage a definir)
+  dataEmissao         DateTime @default(now()) @map("data_emissao")
+
+  exame            Exame            @relation(fields: [exameId], references: [id])
+  medicoExecutante MedicoExecutante @relation(fields: [medicoExecutanteId], references: [id])
+  notificacoes     Notificacao[]
+
+  @@map("laudos")
+}
+
+model Notificacao {
+  id              String   @id @default(uuid())
+  laudoId         String   @map("laudo_id")
+  destinatarioId  String   @map("destinatario_id")
+  canal           String   @default("email") // RF07: hoje só e-mail; campo aberto para futuros canais
+  enviadoEm       DateTime @default(now()) @map("enviado_em")
+
+  laudo         Laudo   @relation(fields: [laudoId], references: [id])
+  destinatario  Usuario @relation(fields: [destinatarioId], references: [id])
+
+  @@map("notificacoes")
+}
