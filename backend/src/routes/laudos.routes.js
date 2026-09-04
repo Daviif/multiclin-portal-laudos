@@ -4,7 +4,10 @@ import { requireAuth, requirePerfil } from "../middleware/auth.middleware.js";
 export const laudosRouter = Router();
 
 // RF03 — recebimento automático do laudo via PACS/RIS (objetivo desejável;
-// alternativa: endpoint de importação manual se a integração não for viável no prazo)
+// alternativa: endpoint de importação manual se a integração não for viável no prazo).
+// Também é aqui que o Paciente é cadastrado automaticamente (RF02): se o exame que
+// vem do PACS/RIS for de alguém sem Usuario/Paciente ainda, criar os dois nessa rota
+// (mesmo padrão de usuarios.routes.js: Usuario com senhaHash null + convite RF09).
 laudosRouter.post("/", requireAuth, requirePerfil("MEDICO_EXECUTANTE"), (req, res) => {
   res.status(501).json({ error: "TODO RF03: disponibilizar laudo (PACS/RIS ou importação manual)" });
 });
