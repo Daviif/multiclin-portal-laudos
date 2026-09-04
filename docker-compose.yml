@@ -7,7 +7,8 @@ services:
       POSTGRES_PASSWORD: multiclin
       POSTGRES_DB: multiclin
     ports:
-      - "5432:5432"
+      # host 5435 (não 5432): sua máquina já tem um Postgres do sistema nessa porta.
+      - "5435:5432"
     volumes:
       - multiclin_db_data:/var/lib/postgresql/data
 
