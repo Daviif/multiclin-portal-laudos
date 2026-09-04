@@ -7,7 +7,9 @@ desnecessária.
 
 ## Board
 
-Board no GitHub Projects, ligado a este repositório. Colunas:
+Board no GitHub Projects, ligado a este repositório: https://github.com/users/Daviif/projects/1
+
+Colunas:
 
 | Coluna | Significado |
 |---|---|

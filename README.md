@@ -22,6 +22,9 @@ Os requisitos funcionais/não funcionais e regras de negócio usados como base p
 
 Trabalhamos com **Kanban** no GitHub Projects. O fluxo de trabalho, convenções de branch/commit e definição de pronto estão descritos em [`PROCESSO.md`](PROCESSO.md).
 
+- **Board:** https://github.com/users/Daviif/projects/1
+- **Issues (backlog):** https://github.com/Daviif/multiclin-portal-laudos/issues
+
 ## Status
 
 Etapa 5 (implementação) recém-iniciada — ver o board do projeto para o andamento atual.
