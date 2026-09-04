@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import { authRouter } from "./routes/auth.routes.js";
+import { usuariosRouter } from "./routes/usuarios.routes.js";
 import { pacientesRouter } from "./routes/pacientes.routes.js";
 import { examesRouter } from "./routes/exames.routes.js";
 import { laudosRouter } from "./routes/laudos.routes.js";
@@ -17,6 +18,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/usuarios", usuariosRouter);
 app.use("/pacientes", pacientesRouter);
 app.use("/exames", examesRouter);
 app.use("/laudos", laudosRouter);

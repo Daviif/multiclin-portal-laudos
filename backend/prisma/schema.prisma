@@ -2,6 +2,10 @@
 // (../../Etapa 4 - Planejamento/Modelo_Banco_de_Dados.puml).
 // Onde o .puml usava `string` para um campo de domínio fechado (perfil, modalidade
 // de exame), foi trocado por enum aqui — ajustar/reverter se a dupla preferir.
+//
+// ADMINISTRADOR (RF14) foi adicionado na Etapa 5 e ainda não está no .puml/Etapa 3
+// original — ver issue #14. Sem tabela própria (Paciente/MedicoSo/...) porque não
+// tem nenhum atributo específico hoje; usa só Usuario.perfil.
 
 generator client {
   provider = "prisma-client-js"
@@ -17,6 +21,7 @@ enum Perfil {
   MEDICO_SOLICITANTE
   MEDICO_EXECUTANTE
   REGULACAO
+  ADMINISTRADOR // RF14 — equipe da clínica; cadastra/gerencia os demais perfis
 }
 
 // RF04 — modalidades de exame que precisam ser filtráveis.

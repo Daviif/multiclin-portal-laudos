@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth.middleware.js";
+import { requireAuth, requirePerfil } from "../middleware/auth.middleware.js";
 
 export const pacientesRouter = Router();
 
-// RF02 — cadastro e gerenciamento de pacientes
-// TODO: definir qual(is) perfil(is) pode(m) cadastrar paciente antes de travar com requirePerfil(...)
-pacientesRouter.post("/", requireAuth, (req, res) => {
+// RF02 — cadastro e gerenciamento de pacientes.
+// Quem cadastra é o Administrador (RF14, issue #14) — dados específicos do
+// paciente (cpf, data_nascimento); o Usuario/convite em si é criado via /usuarios.
+pacientesRouter.post("/", requireAuth, requirePerfil("ADMINISTRADOR"), (req, res) => {
   res.status(501).json({ error: "TODO RF02: cadastrar paciente" });
 });
 

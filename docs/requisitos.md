@@ -17,10 +17,18 @@ e das histórias de usuário da Etapa 4. Cada RF abaixo vira uma ou mais issues 
 - **RF10** — Alteração de senha pelo próprio usuário (tela de configurações).
 - **RF11** — Listagem de laudos executados pelo médico executante (com filtro por modalidade).
 - **RF12** — Download em lote de laudos por período, para a regulação municipal.
+- **RF14** — Perfil Administrador (equipe da clínica): cadastro e gerenciamento de usuários de
+  qualquer perfil, disparando o convite de primeiro acesso (RF09). *(Decidido na Etapa 5 — issue #14;
+  não existia na Etapa 3/4 original, ver pendência abaixo.)*
 
 > **RF13**: numeração pendente de fechamento — ver histórico da Etapa 4 (pendência já registrada de
 > inserir as histórias de usuário RF09-RF13 e os diagramas PlantUML no documento). Ajustar este
 > arquivo e a Etapa 4 assim que a dupla decidir o requisito exato.
+>
+> **Perfil Administrador (RF14)**: adicionado durante a Etapa 5, depois da Etapa 3 (que descreve só
+> 4 perfis) e da Etapa 4 já terem sido entregues. Se isso valer para a nota da disciplina, a dupla
+> precisa registrar esse 5º perfil manualmente nesses documentos — não alterei os .docx/wireframes
+> já entregues.
 
 ## Requisitos Não Funcionais
 
@@ -44,3 +52,4 @@ e das histórias de usuário da Etapa 4. Cada RF abaixo vira uma ou mais issues 
 - **Médico solicitante** — acompanha o retorno dos laudos dos pacientes que encaminhou.
 - **Médico executante** — produz e finaliza laudos.
 - **Regulação municipal** — acompanha exames encaminhados pelo sistema público de saúde.
+- **Administrador** — equipe da clínica; cadastra e gerencia usuários de todos os perfis (RF14).
