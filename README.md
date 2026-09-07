@@ -45,8 +45,11 @@ docker-compose.yml   Postgres local para desenvolvimento
    cp .env.example .env
    npm install
    npm run prisma:migrate   # cria as tabelas a partir do schema.prisma
+   npm run admin:criar      # cria o 1º usuário Administrador (nome/e-mail/senha via prompt)
    npm run dev              # http://localhost:3333
    ```
+   Alternativa pra testar rápido sem digitar nada: `npm run prisma:seed` cria um usuário de
+   demonstração por perfil (senha `multiclin123` pra todos — não usar fora do ambiente local).
 3. Frontend:
    ```
    cd frontend
@@ -56,9 +59,10 @@ docker-compose.yml   Postgres local para desenvolvimento
 
 O frontend faz proxy de `/api/*` para o backend (ver `frontend/vite.config.js`).
 
-Cada rota do backend e cada tela do frontend hoje é um placeholder (`TODO RFxx: ...`)
-apontando para a issue correspondente no board — a estrutura de pastas já reflete
-os 8 wireframes e os RF01-RF12, falta implementar a lógica de cada um.
+RF01 (login), RF09 (definir senha do convite) e RF14 (Administrador cadastra usuário) já
+funcionam de ponta a ponta. O resto das rotas/telas ainda é um placeholder (`TODO RFxx: ...`)
+apontando para a issue correspondente no board — a estrutura de pastas já reflete os 8
+wireframes e os RF01-RF12, falta implementar a lógica de cada um.
 
 ## Processo de desenvolvimento
 

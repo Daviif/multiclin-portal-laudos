@@ -23,25 +23,38 @@ Cada item do board é uma *issue* do repositório, derivada de um requisito func
 (RF) do documento de requisitos. Issues grandes (um RF inteiro) devem ser quebradas
 em subtarefas menores antes de irem para "A Fazer".
 
+## Branches: `main` e `dev`
+
+- `main` representa sempre um estado estável e entregável — não recebe commit
+  nem PR direto de branch de feature.
+- `dev` é a branch de integração, onde o trabalho da dupla vai se juntando.
+- Ao fechar uma etapa/entrega, abre-se um PR de `dev` para `main`.
+
 ## Fluxo de trabalho
 
 1. Pegue um item de **A Fazer**, mova para **Em andamento** e atribua-se a ele.
-2. Crie uma branch a partir da `main`: `tipo/descricao-curta` (ex: `feat/login-por-perfil`,
-   `fix/filtro-modalidade`, `docs/atualizar-readme`).
+2. Crie uma branch a partir da `dev` (mantenha-a atualizada antes: `git pull origin dev`):
+   `tipo/descricao-curta` (ex: `feat/login-por-perfil`, `fix/filtro-modalidade`,
+   `docs/atualizar-readme`).
 3. Faça commits pequenos e com mensagens no padrão *Conventional Commits*:
    `feat: `, `fix: `, `docs: `, `refactor: `, `test: `, `chore: `.
-4. Ao terminar, abra um Pull Request para a `main`, mova o item para **Em revisão**
-   e peça revisão da outra pessoa da dupla.
+4. Ao terminar, abra um Pull Request para a `dev` (nunca direto para a `main`), mova
+   o item para **Em revisão** e peça revisão da outra pessoa da dupla.
+   - O PR dispara a CI (`.github/workflows/ci.yml`): build do frontend e validação
+     do schema do backend. O PR só pode ser mergeado com o check verde.
 5. Quem revisa testa localmente e comenta/aprova. Só o autor do PR faz o merge,
-   depois de aprovado.
-6. Após o merge, mova o item para **Concluído** e feche a issue (o GitHub faz isso
-   automaticamente se o commit/PR referenciar `closes #N`).
+   depois de aprovado e com a CI passando.
+6. Após o merge na `dev`, mova o item para **Concluído** e feche a issue (o GitHub
+   faz isso automaticamente se o commit/PR referenciar `closes #N`).
+7. Periodicamente, ao fechar uma etapa/entrega, abra um PR de `dev` para `main`
+   pra consolidar o que já foi validado.
 
 ## Definição de pronto (Definition of Done)
 
 Um item só vai para **Concluído** quando:
 
-- O código está mergeado na `main`;
+- O código está mergeado na `dev`;
+- A CI passou (build do frontend e validação do schema do backend);
 - Foi testado manualmente rodando a aplicação (não só lido/revisado);
 - Não quebrou nenhuma tela/fluxo existente do protótipo/backlog anterior;
 - Está de acordo com o requisito funcional (RF) de origem.

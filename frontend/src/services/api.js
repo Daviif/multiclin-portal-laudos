@@ -1,3 +1,5 @@
+import { clearUserSession } from "./auth";
+
 const BASE_URL = "/api";
 
 // Wrapper fino sobre fetch — troca o header Authorization automaticamente
@@ -15,6 +17,16 @@ export async function api(path, { method = "GET", body, token } = {}) {
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));
+
+    // 401 numa chamada que já mandou token = sessão expirada/inválida (não é
+    // "senha errada" — isso não passa token e é tratado normalmente pela
+    // tela de login). Desloga e manda pra tela de login com o motivo.
+    if (res.status === 401 && token) {
+      clearUserSession();
+      window.location.href = "/?sessaoExpirada=1";
+      return new Promise(() => {});
+    }
+
     throw new Error(error.error || `Erro ${res.status}`);
   }
 

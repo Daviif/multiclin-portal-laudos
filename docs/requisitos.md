@@ -6,7 +6,8 @@ e das histórias de usuário da Etapa 4. Cada RF abaixo vira uma ou mais issues 
 ## Requisitos Funcionais
 
 - **RF01** — Autenticação de usuários com perfis distintos: médico solicitante, médico executante, paciente e regulação municipal.
-- **RF02** — Cadastro e gerenciamento de pacientes vinculados aos seus exames e laudos.
+- **RF02** — Cadastro e gerenciamento de pacientes vinculados aos seus exames e laudos. Cadastro é
+  automático via RF03 (integração PACS/RIS) — o admin não cadastra paciente manualmente pelo painel.
 - **RF03** — Disponibilização automática do laudo via integração com o sistema de imagem existente (PACS/RIS) — não é upload manual. *(Objetivo desejável; se inviável no prazo, cai para importação manual — ver Escopo na Etapa 3.)*
 - **RF04** — Busca e filtro de laudos por paciente, data e modalidade de exame (US, RX, MG, TC, RM).
 - **RF05** — Visualização e download de laudos em PDF.
@@ -19,7 +20,9 @@ e das histórias de usuário da Etapa 4. Cada RF abaixo vira uma ou mais issues 
 - **RF12** — Download em lote de laudos por período, para a regulação municipal.
 - **RF14** — Perfil Administrador (equipe da clínica): cadastro e gerenciamento de usuários de
   qualquer perfil, disparando o convite de primeiro acesso (RF09). *(Decidido na Etapa 5 — issue #14;
-  não existia na Etapa 3/4 original, ver pendência abaixo.)*
+  não existia na Etapa 3/4 original, ver pendência abaixo.)* Um usuário de qualquer perfil (não só
+  Administrador) pode também ter um cadastro de Paciente vinculado — cobre o caso de um funcionário
+  da clínica que também é paciente e precisa ver os próprios laudos.
 
 > **RF13**: numeração pendente de fechamento — ver histórico da Etapa 4 (pendência já registrada de
 > inserir as histórias de usuário RF09-RF13 e os diagramas PlantUML no documento). Ajustar este
