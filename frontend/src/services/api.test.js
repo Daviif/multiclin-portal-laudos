@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { api } from "./api";
+import * as auth from "./auth";
 
 describe("api()", () => {
   beforeEach(() => {
@@ -8,6 +9,7 @@ describe("api()", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("faz GET em /api<path> com o header de conteúdo certo e devolve o JSON", async () => {
@@ -51,6 +53,38 @@ describe("api()", () => {
     fetch.mockResolvedValueOnce({
       ok: false,
       status: 400,
+      json: async () => ({ error: "E-mail ou senha inválidos" }),
+    });
+
+    await expect(api("/auth/login", { method: "POST", body: {} })).rejects.toThrow(
+      "E-mail ou senha inválidos"
+    );
+  });
+
+  it("em 401 com token, limpa a sessão e redireciona pro login (sessão expirada) em vez de lançar erro", async () => {
+    const clearUserSessionSpy = vi.spyOn(auth, "clearUserSession").mockImplementation(() => {});
+    delete window.location;
+    window.location = { href: "" };
+
+    fetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      json: async () => ({ error: "Token inválido ou expirado" }),
+    });
+
+    // A promise nunca resolve nesse caso (a navegação é o "retorno") — só
+    // garantimos que o redirect e a limpeza de sessão acontecem antes disso.
+    api("/usuarios", { token: "abc123" });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(clearUserSessionSpy).toHaveBeenCalled();
+    expect(window.location.href).toBe("/?sessaoExpirada=1");
+  });
+
+  it("em 401 sem token (senha errada no login), lança o erro normalmente", async () => {
+    fetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
       json: async () => ({ error: "E-mail ou senha inválidos" }),
     });
 
