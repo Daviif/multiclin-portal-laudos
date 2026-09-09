@@ -2,6 +2,7 @@ import { Router } from "express";
 import { requireAuth, requirePerfil } from "../middleware/auth.middleware.js";
 import { prisma } from "../lib/prisma.js";
 import { gerarTokenConvite } from "../lib/convite.js";
+import { enviarEmail } from "../lib/email.js";
 
 export const usuariosRouter = Router();
 
@@ -11,9 +12,9 @@ export const usuariosRouter = Router();
 const PERFIS_VALIDOS = ["MEDICO_SOLICITANTE", "MEDICO_EXECUTANTE", "REGULACAO", "ADMINISTRADOR"];
 
 // RF14 (issue #14) — Administrador cadastra usuário de qualquer perfil e
-// dispara o convite de primeiro acesso (RF09). RF07 (e-mail) ainda não existe,
-// então por enquanto devolvemos o link do convite na resposta para o admin
-// repassar manualmente — trocar por envio de e-mail quando RF07 for implementado.
+// dispara o convite de primeiro acesso (RF09), que sai por e-mail (lib/email.js).
+// Não é RF07: RF07 é a notificação de laudo pronto, um recurso à parte — o
+// convite de criação de conta é responsabilidade do próprio RF09/RF14.
 usuariosRouter.post("/", requireAuth, requirePerfil("ADMINISTRADOR"), async (req, res) => {
   const { nome, email, perfil, cpf, dataNascimento, crm, municipio, uf, tambemPaciente } = req.body ?? {};
 
@@ -69,11 +70,15 @@ usuariosRouter.post("/", requireAuth, requirePerfil("ADMINISTRADOR"), async (req
   });
 
   const conviteToken = gerarTokenConvite(usuario.id);
+  const link = `${process.env.FRONTEND_URL}/definir-senha?token=${conviteToken}`;
+  await enviarEmail({
+    para: usuario.email,
+    assunto: "Bem-vindo(a) à Multiclin — defina sua senha",
+    texto: `Olá ${usuario.nome},\n\nSua conta na Multiclin foi criada. Clique no link abaixo para definir sua senha e acessar o sistema (válido por 7 dias):\n${link}`,
+  });
 
   res.status(201).json({
     usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email, perfil: usuario.perfil },
-    conviteToken,
-    conviteCaminho: `/definir-senha?token=${conviteToken}`,
   });
 });
 

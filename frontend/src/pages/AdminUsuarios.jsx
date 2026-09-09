@@ -217,10 +217,8 @@ export default function AdminUsuarios() {
 
         {conviteGerado && (
           <p className="admin-alert admin-alert-success">
-            Usuário <strong>{conviteGerado.usuario.nome}</strong> cadastrado. RF07 (e-mail) ainda não existe — copie o
-            link de convite abaixo e envie manualmente por enquanto:
-            <br />
-            <code>{window.location.origin + conviteGerado.conviteCaminho}</code>
+            Usuário <strong>{conviteGerado.usuario.nome}</strong> cadastrado. Convite de primeiro acesso enviado para{" "}
+            <strong>{conviteGerado.usuario.email}</strong>.
           </p>
         )}
 

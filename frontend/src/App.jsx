@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login.jsx";
 import DefinirSenha from "./pages/DefinirSenha.jsx";
+import EsqueciSenha from "./pages/EsqueciSenha.jsx";
 import PacienteHome from "./pages/PacienteHome.jsx";
 import MedicoSolicitanteHome from "./pages/MedicoSolicitanteHome.jsx";
 import MedicoExecutanteHome from "./pages/MedicoExecutanteHome.jsx";
@@ -19,6 +20,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/definir-senha" element={<DefinirSenha />} />
+      <Route path="/esqueci-senha" element={<EsqueciSenha />} />
       <Route path="/paciente" element={<PacienteHome />} />
       <Route path="/medico-solicitante" element={<MedicoSolicitanteHome />} />
       <Route path="/medico-executante" element={<MedicoExecutanteHome />} />
