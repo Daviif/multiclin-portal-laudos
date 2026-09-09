@@ -109,12 +109,8 @@ export default function Login() {
           {carregando ? "Entrando…" : "Entrar"}
         </button>
 
-        <button type="button" className="login-submit" onClick={() => navigate("/definir-senha")} disabled={carregando}>
-          {carregando ? "Entrando…" : "Primeiro acesso"}
-        </button>
-
         <div className="login-link-row">
-          <button type="button" className="login-link" onClick={() => navigate("/definir-senha")} disabled={carregando}>
+          <button type="button" className="login-link" onClick={() => navigate("/esqueci-senha")} disabled={carregando}>
             Esqueci minha senha
           </button>
         </div>
